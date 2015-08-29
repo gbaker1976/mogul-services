@@ -1,0 +1,29 @@
+{
+  "name": "mogul-services",
+  "version": "1.0.0",
+  "description": "Core services provided by the Mogul API",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "dependencies": {
+    "underscore": "^1.8.3",
+    "node-uuid": "^1.4.3",
+    "couchbase": "^2.0.12",
+    "mogul-node": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gbaker1976/mogul-services.git"
+  },
+  "author": "Garrett Baker",
+  "license": "Proprietary",
+  "bugs": {
+    "url": "https://github.com/gbaker1976/mogul-services/issues"
+  },
+  "homepage": "https://github.com/gbaker1976/mogul-services"
+}
