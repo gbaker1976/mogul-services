@@ -7,10 +7,9 @@
     "doc": "doc"
   },
   "dependencies": {
-    "underscore": "^1.8.3",
+    "mogul-node": "file:../mogul-node",
     "node-uuid": "^1.4.3",
-    "couchbase": "^2.0.12",
-    "mogul-node": "^1.0.0"
+    "underscore": "^1.8.3"
   },
   "devDependencies": {},
   "scripts": {
