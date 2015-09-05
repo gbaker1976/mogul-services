@@ -1,7 +1,8 @@
 var mogul = require( 'mogul-node' );
 var accountsService = require( './services/accounts' );
+var config = require( 'config' );
 
-mogul( [ accountsService ], {
+mogul( [ accountsService ], config, {
   serviceName: "Mogul API Core",
   api: {
     server: {
