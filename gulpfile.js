@@ -5,18 +5,20 @@ var reload = browserSync.reload;
 
 gulp.task( 'gen-api-docs', function() {
 	return gulp.src( './doc/**/*.md' )
-	.pipe( aglio( { template: 'default' } ) )
-	.pipe( gulp.dest( './doc' ) );
+		.pipe( aglio( { template: 'slate', includePath: './doc' } ) )
+		.pipe( gulp.dest( './doc' ) );
 });
 
-gulp.task( 'serve', function() {
+gulp.task( 'doc-watch', [ 'gen-api-docs' ], reload );
+
+gulp.task( 'serve', [ 'gen-api-docs' ], function() {
 	browserSync({
 		server: {
 			baseDir: 'doc'
 		}
 	});
+
+	gulp.watch( './**/*.md', { cwd: 'doc' }, [ 'doc-watch' ] );
 });
 
-gulp.watch( './doc/**/*.md', { cwd: 'doc' }, [ 'gen-api-docs', reload ] );
-
-gulp.task( 'default', [ 'gen-api-docs', 'serve' ] );
+gulp.task( 'default', [ 'serve' ] );

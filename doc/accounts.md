@@ -48,12 +48,12 @@ A single Account object with all its details
 
     + Body
 
-            {
-                "id": 2,
-                "username": "elephantking24",
-                "firstName": "George",
-                "lastName": "Fapgar"
-            }
+	        {
+	            "id": 2,
+	            "username": "elephantking24",
+	            "firstName": "George",
+	            "lastName": "Fapgar"
+	        }
 
 ### Remove an Account [DELETE]
 + Response 204
