@@ -7,9 +7,12 @@
     "doc": "doc"
   },
   "dependencies": {
+    "bunyan": "^1.5.1",
     "config": "^1.16.0",
     "mogul-node": "file:../mogul-node",
     "node-uuid": "^1.4.3",
+    "pg": "^4.4.4",
+    "restify": "^4.0.4",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
@@ -17,6 +20,7 @@
     "browser-sync": "^2.9.6",
     "gulp": "3.8.11",
     "gulp-aglio": "0.0.6",
+    "gulp-tap": "^0.1.3",
     "nodeunit": "^0.9.1"
   },
   "scripts": {

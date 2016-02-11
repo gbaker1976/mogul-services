@@ -1,25 +1,24 @@
-var mogul = require( 'mogul-node' );
-var accountsService = require( './services/accounts' );
-var projectsService = require( './services/projects' );
-var config = require( 'config' );
+var restify = require( 'restify' );
+var sitesService = require( './services/sites' );
+// var pagesService = require( './services/pages' );
+// var regionsService = require( './services/regions' );
+// var contentsService = require( './services/contents' );
+// var componentsService = require( './services/components' );
 
-mogul( [ accountsService, projectsService ], config, {
-  serviceName: "Mogul API Core",
-  api: {
-    server: {
-      https: false,
-      host: '127.0.0.1',
-      port: 10001
-    },
-    routes: {
-      '/accounts': [ 'get', 'post' ],
-      '/accounts/:id': [ 'get', 'put', 'del' ],
-	  '/projects': [ 'get', 'post' ],
-      '/projects/:projectId': [ 'get', 'put', 'del' ],
-	  '/projects/:projectId/items': [ 'get', 'post' ],
-	  '/projects/:projectId/items/:itemId': [ 'get', 'put', 'del' ],
-	  '/projects/:projectId/items/:itemId/tasks': [ 'get', 'post' ],
-	  '/projects/:projectId/items/:itemId/tasks/:taskId': [ 'get', 'put', 'del' ]
-    }
-  }
+var server = restify.createServer({
+  name: 'Mogul API Core',
+  version: '0.1.0'
+});
+
+server.use( restify.queryParser() );
+server.use( restify.bodyParser() );
+
+[ sitesService ].forEach(function( service ){
+  service.register( server );
+});
+
+server.use( restify.gzipResponse() );
+
+server.listen( 10001, function () {
+  console.log( '%s listening at %s', server.name, server.url );
 });
