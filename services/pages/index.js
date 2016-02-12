@@ -3,6 +3,40 @@ var VERSION = '0.1.0';
 var returnError = function( err, res ){
     res.send( 500 );
 };
+var formatListPayload = function( list ){
+    var pyl = {
+        meta: {
+            count: list.length,
+            page: 1,
+            pageSize: 50,
+            links: {
+                next: '/pages/' + entity.page_id + '?page=2'
+            }
+        },
+        entities: list
+    };
+
+    return pyl;
+};
+var formatEntityPayload = function( entity ){
+    var pyl = {
+        meta: {
+            rels: {
+                pages: '/pages/' + entity.page_id + '/regions',
+                aliases: '/pages/' + entity.page_id + '/aliases'
+            },
+            actions: {
+                preview: '/actions/preview/page/' + entity.page_id,
+                copy: '/actions/copy/page/' + entity.page_id,
+                publish: '/actions/publish/page/' + entity.page_id,
+                unpublish: '/actions/unpublish/page/' + entity.page_id
+            }
+        },
+        entity: entity
+    };
+
+    return pyl;
+};
 
 module.exports = {
   register: function( app ) {
@@ -11,17 +45,27 @@ module.exports = {
               if ( err ) {
                   return returnError( err, res );
               }
-              res.json( 200, page );
+              res.json( 200, formatEntityPayload( page ) );
               next();
           });
   	});
+
+    app.get( { path: '/pages/:id/aliases', version: VERSION }, function( req, res, next ){
+        data.getAliases( req.params.id, 'page', function( err, aliases ){
+            if ( err ) {
+                return returnError( err, res );
+            }
+            res.json( 200, formatListPayload( aliases ) );
+            next();
+        });
+    });
 
 	app.get( { path: '/pages', version: VERSION }, function( req, res, next ){
         data.getAllPages( function( err, pages ){
             if ( err ) {
                 return returnError( err, res );
             }
-            res.json( 200, pages );
+            res.json( 200, formatListPayload( pages ) );
             next();
         });
 	});
@@ -36,7 +80,7 @@ module.exports = {
             if ( err ) {
                 return returnError( err, res );
             }
-            res.json( 200, page );
+            res.json( 200, formatEntityPayload( page ) );
             next();
         });
 	});
@@ -46,7 +90,7 @@ module.exports = {
             if ( err ) {
                 return returnError( err, res );
             }
-            res.send( 200, page );
+            res.send( 200, formatEntityPayload( page ) );
             next();
         });
 	});
