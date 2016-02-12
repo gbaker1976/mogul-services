@@ -1,41 +1,8 @@
 var data = require( '../../lib/data' );
+var payloadFormatter = require( '../../lib/payload-formatters' );
 var VERSION = '0.1.0';
 var returnError = function( err, res ){
     res.send( 500 );
-};
-var formatListPayload = function( list ){
-    var pyl = {
-        meta: {
-            count: list.length,
-            page: 1,
-            pageSize: 50,
-            links: {
-                next: '/sites/' + entity.site_id + '?page=2'
-            }
-        },
-        entities: list
-    };
-
-    return pyl;
-};
-var formatEntityPayload = function( entity ){
-    var pyl = {
-        meta: {
-            rels: {
-                pages: '/sites/' + entity.site_id + '/pages',
-                aliases: '/sites/' + entity.site_id + '/aliases'
-            },
-            actions: {
-                preview: '/actions/preview/site/' + entity.site_id,
-                copy: '/actions/copy/site/' + entity.site_id,
-                publish: '/actions/publish/site/' + entity.site_id,
-                unpublish: '/actions/unpublish/site/' + entity.site_id
-            }
-        },
-        entity: entity
-    };
-
-    return pyl;
 };
 
 module.exports = {
@@ -45,7 +12,7 @@ module.exports = {
               if ( err ) {
                   return returnError( err, res );
               }
-              res.json( 200, formatEntityPayload( site ) );
+              res.json( 200, payloadFormatter.formatSiteEntityPayload( site ) );
               next();
           });
   	});
@@ -55,7 +22,17 @@ module.exports = {
             if ( err ) {
                 return returnError( err, res );
             }
-            res.json( 200, formatListPayload( aliases ) );
+            res.json( 200, payloadFormatter.formatPageAliasListPayload( req.params.id, aliases ) );
+            next();
+        });
+    });
+
+    app.get( { path: '/sites/:id/pages', version: VERSION }, function( req, res, next ){
+        data.getPagesBySiteId( req.params.id, function( err, pages ){
+            if ( err ) {
+                return returnError( err, res );
+            }
+            res.json( 200, payloadFormatter.formatPageListPayload( pages ) );
             next();
         });
     });
@@ -65,20 +42,10 @@ module.exports = {
             if ( err ) {
                 return returnError( err, res );
             }
-            res.json( 200, formatListPayload( sites ) );
+            res.json( 200, payloadFormatter.formatSiteListPayload( sites ) );
             next();
         });
 	});
-
-    app.get( { path: '/sites/:id/aliases', version: VERSION }, function( req, res, next ){
-        data.getAliases( req.params.id, 'site', function( err, aliases ){
-            if ( err ) {
-                return returnError( err, res );
-            }
-            res.json( 200, formatListPayload( aliases ) );
-            next();
-        });
-  });
 
     // app.patch( { path: '/sites/:id', version: VERSION }, function( req, res, next ){
     //     res.send( 'PATCH supported!' );
@@ -90,7 +57,7 @@ module.exports = {
             if ( err ) {
                 return returnError( err, res );
             }
-            res.json( 200, formatEntityPayload( site ) );
+            res.json( 200, payloadFormatter.formatSiteEntityPayload( site ) );
             next();
         });
 	});
@@ -100,7 +67,7 @@ module.exports = {
             if ( err ) {
                 return returnError( err, res );
             }
-            res.send( 200, formatEntityPayload( site ) );
+            res.send( 200, payloadFormatter.formatSiteEntityPayload( site ) );
             next();
         });
 	});
