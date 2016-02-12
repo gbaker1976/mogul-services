@@ -1,6 +1,6 @@
 var restify = require( 'restify' );
 var sitesService = require( './services/sites' );
-// var pagesService = require( './services/pages' );
+var pagesService = require( './services/pages' );
 // var regionsService = require( './services/regions' );
 // var contentsService = require( './services/contents' );
 // var componentsService = require( './services/components' );
@@ -13,7 +13,7 @@ var server = restify.createServer({
 server.use( restify.queryParser() );
 server.use( restify.bodyParser() );
 
-[ sitesService ].forEach(function( service ){
+[ sitesService, pagesService ].forEach(function( service ){
   service.register( server );
 });
 
